@@ -1,161 +1,225 @@
 # Learning Rust for Fun
 
-Learning Rust with a clear goal — **backend development**.
-Step by step through the basics, then build a real production-grade backend server.
+Learning Rust from zero — first understand the concepts, then build 3 real projects.
 
-> Why backend Rust? It's replacing Node.js/Go in performance-critical services.
-> Companies like Discord, Cloudflare, Figma, and 1Password have moved core backend services to Rust.
-> Same REST/GraphQL/DB concepts you already know from Node.js — just faster and safer.
+---
 
 ## Install Rust
 
-Go to https://rustup.rs and download + run `rustup-init.exe`
+Go to **https://rustup.rs** and follow the instructions for your computer.
 
-After install, verify with:
+Check it worked:
 ```bash
 rustc --version
 cargo --version
 ```
 
-## How This Works
-
-Each stage = build a program that teaches specific concepts.
-No reading theory in isolation — we write code first, understand as we go.
-Every stage builds toward the final goal: a production backend API in Rust.
+> **cargo** = Rust's built-in tool to create and run projects. You'll use `cargo run` to run your code every time.
 
 ---
 
-## Timeline Overview
+## Part 1 — Learn the Concepts
 
-| Stage | Focus | Duration |
+Go through these one by one. Don't skip — each one builds on the previous.
+
+---
+
+### 1. Basic Syntax
+- How a Rust program looks (`fn main()`)
+- Printing to screen (`println!`)
+- Running with `cargo run`
+
+```rust
+fn main() {
+    println!("Hello, World!");
+}
+```
+
+---
+
+### 2. Variables and Data Types
+- Creating variables (`let`)
+- Mutable vs immutable (`let mut`)
+- Common types: numbers (`i32`, `f64`), text (`String`, `&str`), true/false (`bool`)
+
+```rust
+let name = "Devesh";         // can't change
+let mut age = 20;            // can change
+age = 21;
+```
+
+---
+
+### 3. Functions
+- Writing your own functions
+- Passing values in (parameters)
+- Getting values back (return types)
+
+```rust
+fn add(a: i32, b: i32) -> i32 {
+    a + b   // no semicolon = this is returned
+}
+```
+
+---
+
+### 4. Control Flow
+- `if` / `else if` / `else`
+- `loop`, `while`, `for`
+- `break` and `continue`
+
+```rust
+if age >= 18 {
+    println!("adult");
+} else {
+    println!("minor");
+}
+
+for i in 1..=5 {
+    println!("{}", i);  // prints 1 2 3 4 5
+}
+```
+
+---
+
+### 5. Ownership (Rust's most unique concept)
+This is what makes Rust different from every other language. Take your time here.
+
+- Every value has one **owner**
+- When the owner is gone, the value is gone (no garbage collector needed)
+- **Borrowing** — let someone use a value without taking ownership (`&`)
+
+```rust
+let s1 = String::from("hello");
+let s2 = &s1;   // borrowing — s1 still owns it
+println!("{}", s2);
+```
+
+> This will feel confusing at first. That's normal. Just keep writing code and it clicks.
+
+---
+
+### 6. Structs
+- Group related data together
+- Like a custom data type you design
+
+```rust
+struct Person {
+    name: String,
+    age: u32,
+}
+
+let p = Person { name: String::from("Devesh"), age: 21 };
+println!("{}", p.name);
+```
+
+---
+
+### 7. Enums and Pattern Matching
+- Enums = a value that can be one of several things
+- `match` = check which one it is and act on it
+
+```rust
+enum Direction {
+    Up,
+    Down,
+    Left,
+    Right,
+}
+
+let dir = Direction::Up;
+
+match dir {
+    Direction::Up    => println!("going up"),
+    Direction::Down  => println!("going down"),
+    _                => println!("going sideways"),
+}
+```
+
+---
+
+### 8. Error Handling
+- Rust has no exceptions — errors are just values
+- `Option<T>` — something that might or might not exist
+- `Result<T, E>` — something that might succeed or fail
+- `unwrap()`, `expect()`, `match` to handle them
+
+```rust
+let result: Option<i32> = Some(5);
+
+match result {
+    Some(n) => println!("got {}", n),
+    None    => println!("got nothing"),
+}
+```
+
+---
+
+### 9. Collections
+- `Vec<T>` — a list that can grow and shrink
+- `HashMap<K, V>` — store key-value pairs (like a dictionary)
+
+```rust
+let mut nums: Vec<i32> = Vec::new();
+nums.push(1);
+nums.push(2);
+nums.push(3);
+println!("{:?}", nums);  // [1, 2, 3]
+```
+
+---
+
+### 10. Closures and Iterators
+- Closures = small inline functions (like arrow functions)
+- Iterators = loop over collections in a clean way
+
+```rust
+let nums = vec![1, 2, 3, 4, 5];
+
+let doubled: Vec<i32> = nums.iter()
+    .map(|x| x * 2)
+    .collect();
+
+println!("{:?}", doubled);  // [2, 4, 6, 8, 10]
+```
+
+---
+
+## Part 2 — Build 3 Projects
+
+Once you're done with the concepts above, build these 3 projects together.
+
+| # | Project | What It Uses |
 |---|---|---|
-| Stage 1 | Rust basics — 8 small programs | ~2–3 weeks |
-| Stage 2 | Backend building blocks — 6 programs | ~3 weeks |
-| Stage 3 | Real backend project | ~3–4 weeks |
-| **Total** | **Zero to production backend** | **~8–10 weeks** |
-
-> Assuming 1–2 hours per day. Ownership/lifetimes (Program 8) will need extra time — hardest concept in Rust, but critical for backend work.
+| 1 | CLI Calculator | variables, functions, user input, match |
+| 2 | To-Do List App | structs, Vec, enums, loops, file saving |
+| 3 | Expense Tracker | structs, HashMap, error handling, functions |
 
 ---
 
-## Stage 1 — Rust Basics (Build small programs)
-**Goal:** Get comfortable with the language. Duration: ~2–3 weeks
+## My Progress
 
-| # | Program to Build | Concepts Covered | Est. Time |
-|---|---|---|---|
-| 1 | Hello World | `println!`, macros, running with cargo | 1 day |
-| 2 | Calculator (CLI) | Variables, mutability, data types, functions | 2 days |
-| 3 | Guess the Number | User input, conditionals, loops, `Result` | 2 days |
-| 4 | Temperature Converter | Functions, type casting, modules | 2 days |
-| 5 | Simple To-Do List | Structs, `Vec`, enums, pattern matching | 3 days |
-| 6 | Word Counter | Strings, `HashMap`, iterators, closures | 2 days |
-| 7 | File Reader | File I/O, error handling, `Option` / `Result` | 2 days |
-| 8 | Ownership Demo | Ownership, borrowing, lifetimes (the hard part) | 3–4 days |
+**Concepts:**
+- [ ] 1 — Basic Syntax
+- [ ] 2 — Variables and Data Types
+- [ ] 3 — Functions
+- [ ] 4 — Control Flow
+- [ ] 5 — Ownership
+- [ ] 6 — Structs
+- [ ] 7 — Enums and Pattern Matching
+- [ ] 8 — Error Handling
+- [ ] 9 — Collections
+- [ ] 10 — Closures and Iterators
 
----
-
-## Stage 2 — Backend Building Blocks
-**Goal:** Learn exactly what you need for backend APIs. Duration: ~2–3 weeks
-
-Each program here is a direct building block of a real backend server.
-
-| # | Program to Build | Concepts Covered | Est. Time |
-|---|---|---|---|
-| 9  | Async Task Runner | `async/await`, `tokio`, concurrency | 3 days |
-| 10 | HTTP Client | Calling external APIs with `reqwest`, JSON parsing with `serde` | 3 days |
-| 11 | Basic REST API | `axum` router, handlers, JSON responses | 4 days |
-| 12 | API + Database | `sqlx` + PostgreSQL, connection pooling, CRUD | 4 days |
-| 13 | Auth Middleware | JWT validation, middleware layers, error handling | 4 days |
-| 14 | WebSocket Server | Real-time connections, `tokio-tungstenite`, broadcast channels | 4 days |
-
-> After Program 14 you'll have all the pieces to build a real backend.
+**Projects:**
+- [ ] Project 1 — CLI Calculator
+- [ ] Project 2 — To-Do List App
+- [ ] Project 3 — Expense Tracker
 
 ---
 
-## Stage 3 — Real Backend Project
-**Goal:** Ship a production-grade Rust backend. Duration: ~3–4 weeks
+## Helpful Links
 
-### DeFi Portfolio Tracker API
-
-A high-performance REST API that replaces your current Node.js/Express backend pattern — built in Rust with `axum`.
-
-**Why this project:**
-- You already know DeFi data (vault balances, yields, positions, cross-chain state)
-- You've built this kind of backend in Node.js — so the domain is familiar, focus is purely on Rust
-- Real use case: serve your vault contract data without The Graph limitations
-- Directly showcases Rust backend skills to employers
-
-**What you'll build:**
-
-```
-defi-portfolio-api/
-├── src/
-│   ├── main.rs              # Server entry, router setup
-│   ├── routes/
-│   │   ├── portfolio.rs     # GET /portfolio/:address
-│   │   ├── vaults.rs        # GET /vaults, GET /vaults/:id
-│   │   └── health.rs        # GET /health
-│   ├── handlers/            # Business logic
-│   ├── db/                  # sqlx queries, models
-│   ├── onchain/             # Ethereum RPC calls (ethers-rs)
-│   └── middleware/          # Auth, rate limiting, logging
-├── migrations/              # SQL migration files
-└── Cargo.toml
-```
-
-**Features:**
-- Fetch live vault data from Ethereum/Base/Arbitrum via JSON-RPC
-- Cache on-chain data in PostgreSQL
-- REST endpoints: portfolio by wallet, vault stats, yield history
-- JWT auth middleware
-- Rate limiting
-- Docker-ready
-
-**Crates used:**
-
-| Crate | Purpose | Node.js Equivalent |
-|---|---|---|
-| `axum` | Web framework | Express.js |
-| `tokio` | Async runtime | Node.js event loop |
-| `sqlx` | Database (PostgreSQL) | pg / Prisma |
-| `serde` | JSON serialization | JSON.parse / JSON.stringify |
-| `ethers` | Ethereum RPC client | ethers.js |
-| `tower` | Middleware layers | Express middleware |
-| `tracing` | Structured logging | Winston / Pino |
-| `jsonwebtoken` | JWT auth | jsonwebtoken (npm) |
-
----
-
-## Key Difference: Node.js vs Rust Backend
-
-| | Node.js (what you know) | Rust (what you're learning) |
-|---|---|---|
-| Concurrency | Event loop, single thread | True multi-threading, async |
-| Performance | Good | 10–20x faster |
-| Memory | Garbage collected | Manual, no GC, no crashes |
-| Errors | Runtime crashes | Caught at compile time |
-| Docker image | ~200MB | ~5MB (static binary) |
-
----
-
-## Project Structure
-
-```
-learning rust for fun/
-├── Cargo.toml
-├── README.md
-└── src/
-    └── main.rs       # active program we're working on
-```
-
-As we progress, each program may get its own file or module under `src/`.
-
----
-
-## Resources (use when needed)
-
-- [The Rust Book](https://doc.rust-lang.org/book/)
-- [Rust by Example](https://doc.rust-lang.org/rust-by-example/)
-- [Rustlings](https://github.com/rust-lang/rustlings) — exercises
-- [Zero to Production in Rust](https://www.zero2prod.com/) — best book for backend Rust specifically
-- [axum docs](https://docs.rs/axum/latest/axum/) — the framework we'll use
+- [The Rust Book](https://doc.rust-lang.org/book/) — free official beginner guide
+- [Rust by Example](https://doc.rust-lang.org/rust-by-example/) — learn by reading short examples
+- [Rustlings](https://github.com/rust-lang/rustlings) — small exercises to practice each concept
