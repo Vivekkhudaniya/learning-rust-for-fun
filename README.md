@@ -1,6 +1,6 @@
 # Learning Rust for Fun
 
-Learning Rust from zero — first understand the concepts, then build 3 real projects.
+Learning Rust from zero — one concept at a time, then build 3 real projects.
 
 ---
 
@@ -14,20 +14,20 @@ rustc --version
 cargo --version
 ```
 
-> **cargo** = Rust's built-in tool to create and run projects. You'll use `cargo run` to run your code every time.
+> **cargo** = Rust's built-in tool to create and run projects. Use `cargo run --bin <name>` to run each concept file.
 
 ---
 
 ## Part 1 — Learn the Concepts
 
-Go through these one by one. Don't skip — each one builds on the previous.
+Go through these in order. Each one builds on the previous.
 
 ---
 
 ### 1. Basic Syntax
 - How a Rust program looks (`fn main()`)
 - Printing to screen (`println!`)
-- Running with `cargo run`
+- Comments
 
 ```rust
 fn main() {
@@ -38,32 +38,35 @@ fn main() {
 ---
 
 ### 2. Variables and Data Types
-- Creating variables (`let`)
-- Mutable vs immutable (`let mut`)
-- Common types: numbers (`i32`, `f64`), text (`String`, `&str`), true/false (`bool`)
+- Creating variables with `let`
+- Common types: `i32`, `f64`, `bool`, `String`, `&str`
+- Rust can guess the type (type inference)
 
 ```rust
-let name = "Devesh";         // can't change
-let mut age = 20;            // can change
-age = 21;
+let name = "Vivek";
+let age = 21;
+let price = 9.99;
+let is_learning = true;
 ```
 
 ---
 
-### 3. Functions
-- Writing your own functions
-- Passing values in (parameters)
-- Getting values back (return types)
+### 3. Mutability
+- By default, variables in Rust **cannot be changed**
+- Add `mut` to allow changes
+- Constants with `const` — never change, ever
 
 ```rust
-fn add(a: i32, b: i32) -> i32 {
-    a + b   // no semicolon = this is returned
-}
+let x = 5;          // cannot change
+let mut y = 5;      // can change
+y = 10;
+
+const MAX: i32 = 100;   // constant
 ```
 
 ---
 
-### 4. Control Flow
+### 4. Conditionals and Loops
 - `if` / `else if` / `else`
 - `loop`, `while`, `for`
 - `break` and `continue`
@@ -71,37 +74,80 @@ fn add(a: i32, b: i32) -> i32 {
 ```rust
 if age >= 18 {
     println!("adult");
-} else {
-    println!("minor");
 }
 
 for i in 1..=5 {
-    println!("{}", i);  // prints 1 2 3 4 5
+    println!("{}", i);
 }
 ```
 
 ---
 
-### 5. Ownership (Rust's most unique concept)
-This is what makes Rust different from every other language. Take your time here.
-
-- Every value has one **owner**
-- When the owner is gone, the value is gone (no garbage collector needed)
-- **Borrowing** — let someone use a value without taking ownership (`&`)
+### 5. Functions
+- Writing your own functions with `fn`
+- Passing values in (parameters)
+- Returning values with `->`
 
 ```rust
-let s1 = String::from("hello");
-let s2 = &s1;   // borrowing — s1 still owns it
-println!("{}", s2);
+fn add(a: i32, b: i32) -> i32 {
+    a + b   // last line without semicolon = returned
+}
 ```
-
-> This will feel confusing at first. That's normal. Just keep writing code and it clicks.
 
 ---
 
-### 6. Structs
-- Group related data together
-- Like a custom data type you design
+### 6. Memory Management
+- Most languages use a garbage collector to clean up memory
+- Rust does NOT — it cleans up memory automatically using **ownership rules**
+- No garbage collector = faster programs, no surprise pauses
+- Memory is freed the moment the owner goes out of scope
+
+---
+
+### 7. Stack vs Heap
+- **Stack** — fast, fixed size, stores simple values (numbers, booleans)
+- **Heap** — slower, flexible size, stores complex values (Strings, Vecs)
+- When you write `let x = 5` → goes on the Stack
+- When you write `String::from("hello")` → goes on the Heap
+- Ownership is all about managing Heap memory safely
+
+---
+
+### 8. Ownership
+- Every value has exactly **one owner**
+- When the owner goes away, the value is deleted from memory
+- Ownership can **move** from one variable to another
+
+```rust
+let s1 = String::from("hello");
+let s2 = s1;   // ownership moved to s2 — s1 no longer works
+
+println!("{}", s2);   // ok
+// println!("{}", s1);  // ERROR
+```
+
+---
+
+### 9. Borrowing and References
+- Borrow a value without taking ownership using `&`
+- Mutable borrow with `&mut` — borrow AND change
+- Only one mutable borrow allowed at a time
+
+```rust
+let s = String::from("hello");
+let len = get_length(&s);   // s is borrowed, not moved
+println!("{} has {} chars", s, len);   // s still works
+
+fn get_length(s: &String) -> usize {
+    s.len()
+}
+```
+
+---
+
+### 10. Structs
+- Group related data together into one custom type
+- Like creating your own data structure
 
 ```rust
 struct Person {
@@ -109,15 +155,37 @@ struct Person {
     age: u32,
 }
 
-let p = Person { name: String::from("Devesh"), age: 21 };
-println!("{}", p.name);
+let p = Person { name: String::from("Vivek"), age: 21 };
+println!("{} is {}", p.name, p.age);
 ```
 
 ---
 
-### 7. Enums and Pattern Matching
-- Enums = a value that can be one of several things
-- `match` = check which one it is and act on it
+### 11. Implementing Structs
+- Add functions (methods) that belong to a struct using `impl`
+- `self` refers to the struct itself (like `this` in other languages)
+
+```rust
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+impl Rectangle {
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+}
+
+let rect = Rectangle { width: 10, height: 5 };
+println!("Area: {}", rect.area());
+```
+
+---
+
+### 12. Enums
+- A type that can be one of several options
+- Much more powerful than enums in other languages
 
 ```rust
 enum Direction {
@@ -128,88 +196,106 @@ enum Direction {
 }
 
 let dir = Direction::Up;
+```
 
+---
+
+### 13. Pattern Matching
+- `match` = check which value something is and act on it
+- Must handle every possible case (Rust forces you to)
+
+```rust
 match dir {
     Direction::Up    => println!("going up"),
     Direction::Down  => println!("going down"),
-    _                => println!("going sideways"),
+    _                => println!("going sideways"),  // _ = everything else
 }
 ```
 
 ---
 
-### 8. Error Handling
+### 14. Error Handling
 - Rust has no exceptions — errors are just values
-- `Option<T>` — something that might or might not exist
-- `Result<T, E>` — something that might succeed or fail
-- `unwrap()`, `expect()`, `match` to handle them
+- `Result<T, E>` — either success (`Ok`) or failure (`Err`)
+- Use `match`, `unwrap()`, or `expect()` to handle them
 
 ```rust
-let result: Option<i32> = Some(5);
+let result: Result<i32, &str> = Ok(42);
 
 match result {
-    Some(n) => println!("got {}", n),
-    None    => println!("got nothing"),
+    Ok(n)  => println!("Success: {}", n),
+    Err(e) => println!("Error: {}", e),
 }
 ```
 
 ---
 
-### 9. Collections
-- `Vec<T>` — a list that can grow and shrink
-- `HashMap<K, V>` — store key-value pairs (like a dictionary)
+### 15. Option Enum
+- `Option<T>` — a value that might or might not exist
+- Either `Some(value)` or `None`
+- Rust's way of replacing `null` (which causes crashes in other languages)
 
 ```rust
-let mut nums: Vec<i32> = Vec::new();
-nums.push(1);
-nums.push(2);
-nums.push(3);
-println!("{:?}", nums);  // [1, 2, 3]
+let found: Option<i32> = Some(5);
+let nothing: Option<i32> = None;
+
+match found {
+    Some(n) => println!("Found: {}", n),
+    None    => println!("Nothing there"),
+}
 ```
 
 ---
 
-### 10. Closures and Iterators
-- Closures = small inline functions (like arrow functions)
-- Iterators = loop over collections in a clean way
+### 16. Cargo, Packages and External Dependencies
+- **Cargo** = Rust's package manager (like npm for JavaScript)
+- External packages are called **crates**
+- Add them to `Cargo.toml` and Cargo downloads them automatically
 
-```rust
-let nums = vec![1, 2, 3, 4, 5];
+```toml
+# Cargo.toml
+[dependencies]
+rand = "0.8"   # adds the random number crate
+```
 
-let doubled: Vec<i32> = nums.iter()
-    .map(|x| x * 2)
-    .collect();
-
-println!("{:?}", doubled);  // [2, 4, 6, 8, 10]
+```bash
+cargo build   # downloads and builds dependencies
+cargo run     # runs your project
 ```
 
 ---
 
 ## Part 2 — Build 3 Projects
 
-Once you're done with the concepts above, build these 3 projects together.
+Once all 16 concepts are done, we build these together.
 
-| # | Project | What It Uses |
+| # | Project | Concepts Used |
 |---|---|---|
 | 1 | CLI Calculator | variables, functions, user input, match |
-| 2 | To-Do List App | structs, Vec, enums, loops, file saving |
-| 3 | Expense Tracker | structs, HashMap, error handling, functions |
+| 2 | To-Do List App | structs, impl, Vec, enums, file saving |
+| 3 | Expense Tracker | structs, HashMap, error handling, Option |
 
 ---
 
 ## My Progress
 
 **Concepts:**
-- [ ] 1 — Basic Syntax
-- [ ] 2 — Variables and Data Types
-- [ ] 3 — Functions
-- [ ] 4 — Control Flow
-- [ ] 5 — Ownership
-- [ ] 6 — Structs
-- [ ] 7 — Enums and Pattern Matching
-- [ ] 8 — Error Handling
-- [ ] 9 — Collections
-- [ ] 10 — Closures and Iterators
+- [x] 1 — Basic Syntax
+- [x] 2 — Variables and Data Types
+- [ ] 3 — Mutability
+- [ ] 4 — Conditionals and Loops
+- [ ] 5 — Functions
+- [ ] 6 — Memory Management
+- [ ] 7 — Stack vs Heap
+- [ ] 8 — Ownership
+- [ ] 9 — Borrowing and References
+- [ ] 10 — Structs
+- [ ] 11 — Implementing Structs
+- [ ] 12 — Enums
+- [ ] 13 — Pattern Matching
+- [ ] 14 — Error Handling
+- [ ] 15 — Option Enum
+- [ ] 16 — Cargo, Packages and External Dependencies
 
 **Projects:**
 - [ ] Project 1 — CLI Calculator
