@@ -290,7 +290,7 @@ Once all 16 concepts are done, we build these together.
 - [x] 8 — Ownership
 - [x] 9 — Borrowing and References
 - [x] 10 — Structs
-- [ ] 11 — Implementing Structs
+- [x] 11 — Implementing Structs
 - [ ] 12 — Enums
 - [ ] 13 — Pattern Matching
 - [ ] 14 — Error Handling
