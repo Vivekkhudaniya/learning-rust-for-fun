@@ -283,13 +283,13 @@ Once all 16 concepts are done, we build these together.
 - [x] 1 — Basic Syntax
 - [x] 2 — Variables and Data Types
 - [ ] 3 — Mutability
-- [ ] 4 — Conditionals and Loops
-- [ ] 5 — Functions
-- [ ] 6 — Memory Management
-- [ ] 7 — Stack vs Heap
-- [ ] 8 — Ownership
-- [ ] 9 — Borrowing and References
-- [ ] 10 — Structs
+- [x] 4 — Conditionals and Loops
+- [x] 5 — Functions
+- [x] 6 — Memory Management
+- [x] 7 — Stack vs Heap
+- [x] 8 — Ownership
+- [x] 9 — Borrowing and References
+- [x] 10 — Structs
 - [ ] 11 — Implementing Structs
 - [ ] 12 — Enums
 - [ ] 13 — Pattern Matching
