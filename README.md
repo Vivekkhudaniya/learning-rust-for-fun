@@ -282,7 +282,7 @@ Once all 16 concepts are done, we build these together.
 **Concepts:**
 - [x] 1 — Basic Syntax
 - [x] 2 — Variables and Data Types
-- [ ] 3 — Mutability
+- [x] 3 — Mutability
 - [x] 4 — Conditionals and Loops
 - [x] 5 — Functions
 - [x] 6 — Memory Management
