@@ -312,8 +312,8 @@ Once the 3 projects are done, we build a real backend using the Axum framework.
 - [x] 12 — Enums
 - [x] 13 — Pattern Matching
 - [x] 14 — Error Handling
-- [ ] 15 — Option Enum
-- [ ] 16 — Cargo, Packages and External Dependencies
+- [x] 15 — Option Enum
+- [x] 16 — Cargo, Packages and External Dependencies
 
 **Projects:**
 - [ ] Project 1 — CLI Calculator
