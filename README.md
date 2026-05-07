@@ -316,7 +316,7 @@ Once the 3 projects are done, we build a real backend using the Axum framework.
 - [x] 16 — Cargo, Packages and External Dependencies
 
 **Projects:**
-- [ ] Project 1 — CLI Calculator
+- [x] Project 1 — CLI Calculator
 - [ ] Project 2 — To-Do List App
 - [ ] Project 3 — Expense Tracker
 
