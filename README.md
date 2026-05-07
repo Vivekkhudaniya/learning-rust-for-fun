@@ -277,6 +277,24 @@ Once all 16 concepts are done, we build these together.
 
 ---
 
+## Part 3 — Backend with Axum
+
+Once the 3 projects are done, we build a real backend using the Axum framework.
+
+**Stack:**
+| Tool | Purpose |
+|---|---|
+| Axum | Web framework — routes and handlers |
+| Tokio | Async runtime |
+| SQLx | Database (PostgreSQL) |
+| Serde | JSON serialization |
+
+| # | Project | What you'll build |
+|---|---|---|
+| 4 | REST API with Axum | Routes, handlers, JSON responses, PostgreSQL |
+
+---
+
 ## My Progress
 
 **Concepts:**
