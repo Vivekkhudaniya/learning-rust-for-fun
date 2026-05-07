@@ -291,9 +291,9 @@ Once all 16 concepts are done, we build these together.
 - [x] 9 — Borrowing and References
 - [x] 10 — Structs
 - [x] 11 — Implementing Structs
-- [ ] 12 — Enums
-- [ ] 13 — Pattern Matching
-- [ ] 14 — Error Handling
+- [x] 12 — Enums
+- [x] 13 — Pattern Matching
+- [x] 14 — Error Handling
 - [ ] 15 — Option Enum
 - [ ] 16 — Cargo, Packages and External Dependencies
 

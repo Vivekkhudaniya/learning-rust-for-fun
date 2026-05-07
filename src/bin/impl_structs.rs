@@ -2,107 +2,64 @@
 //
 // Run this file with:   cargo run --bin impl_structs
 //
-// In concept 10 we learned how to define structs and group data together.
-// Now we attach functions (called methods) directly to a struct using `impl`.
+// In concept 10 we learned how to group data into a struct.
+// Now we give that struct its own functions using `impl`.
 //
-// Think of `impl` like giving your struct its own abilities.
-// A Rectangle struct can calculate its own area, perimeter, etc.
+// Think of it like this:
+//   struct  = the data (name, age)
+//   impl    = the abilities (greet, birthday)
 //
 // ────────────────────────────────────────────────────────────────────────────
 
 
-#[derive(Debug)]
-struct Rectangle {
-    width: f64,
-    height: f64,
+struct Person {
+    name: String,
+    age: u32,
 }
 
-// ── impl block — attach methods to Rectangle ─────────────────────────────────
-//    All methods for a struct go inside one `impl` block
-impl Rectangle {
+impl Person {
 
-    // ── 1. Associated function (no self) — works like a constructor ───────────
-    //    Called with Rectangle::new(...)  not  rect.new(...)
-    //    `self` is not a parameter — it doesn't need an instance to work
-    fn new(width: f64, height: f64) -> Rectangle {
-        Rectangle { width, height }
+    // ── 1. new() — creates a Person ──────────────────────────────────────────
+    //    This is called an associated function — no `self` needed
+    //    You call it like:  Person::new(...)
+    fn new(name: String, age: u32) -> Person {
+        Person { name, age }
     }
 
-    // ── 2. Method (&self) — reads data, doesn't change anything ──────────────
-    //    `&self` means "borrow the struct, read-only"
-    //    Called with  rect.area()
-    fn area(&self) -> f64 {
-        self.width * self.height
+    // ── 2. &self — reads the struct, doesn't change it ───────────────────────
+    //    `self` refers to the Person this method is called on
+    //    You call it like:  person.greet()
+    fn greet(&self) {
+        println!("Hi, I'm {} and I'm {} years old.", self.name, self.age);
     }
 
-    fn perimeter(&self) -> f64 {
-        2.0 * (self.width + self.height)
+    fn is_adult(&self) -> bool {
+        self.age >= 18
     }
 
-    fn is_square(&self) -> bool {
-        self.width == self.height
-    }
-
-    // ── 3. Method (&mut self) — can change the struct's data ─────────────────
-    //    `&mut self` means "borrow the struct, allow changes"
-    //    The instance must be declared with `mut` to call this
-    fn scale(&mut self, factor: f64) {
-        self.width *= factor;
-        self.height *= factor;
-    }
-
-    // ── 4. Method that takes another struct as a parameter ───────────────────
-    //    Can this rectangle fit inside another?
-    fn fits_inside(&self, other: &Rectangle) -> bool {
-        self.width < other.width && self.height < other.height
-    }
-}
-
-
-#[derive(Debug)]
-struct Circle {
-    radius: f64,
-}
-
-impl Circle {
-    fn new(radius: f64) -> Circle {
-        Circle { radius }
-    }
-
-    fn area(&self) -> f64 {
-        std::f64::consts::PI * self.radius * self.radius
-    }
-
-    fn circumference(&self) -> f64 {
-        2.0 * std::f64::consts::PI * self.radius
+    // ── 3. &mut self — can change the struct's data ───────────────────────────
+    //    The variable must be declared with `mut` to call this
+    fn birthday(&mut self) {
+        self.age += 1;
+        println!("{} is now {} years old.", self.name, self.age);
     }
 }
 
 
 fn main() {
-    // ── Using Rectangle ───────────────────────────────────────────────────────
-    let rect = Rectangle::new(10.0, 5.0);  // associated function — no instance needed
-    println!("Rectangle: {:?}", rect);
-    println!("Area:      {}", rect.area());
-    println!("Perimeter: {}", rect.perimeter());
-    println!("Is square: {}", rect.is_square());
+    // ── Creating a Person using new() ─────────────────────────────────────────
+    let mut vivek = Person::new(String::from("Vivek"), 21);
 
-    // ── Mutable method — scale the rectangle ─────────────────────────────────
-    let mut rect2 = Rectangle::new(4.0, 4.0);
-    println!("\nBefore scale: {:?}", rect2);
-    rect2.scale(2.0);
-    println!("After scale:  {:?}", rect2);
-    println!("Is square:    {}", rect2.is_square());
+    // ── Calling methods on it ─────────────────────────────────────────────────
+    vivek.greet();
+    println!("Is adult: {}", vivek.is_adult());
 
-    // ── Method with another struct as parameter ───────────────────────────────
-    let small = Rectangle::new(3.0, 2.0);
-    let large = Rectangle::new(10.0, 8.0);
-    println!("\nSmall fits inside large: {}", small.fits_inside(&large));
-    println!("Large fits inside small: {}", large.fits_inside(&small));
+    // ── Mutating method — changes the age ────────────────────────────────────
+    vivek.birthday();
+    vivek.greet();
 
-    // ── Using Circle ──────────────────────────────────────────────────────────
-    let circle = Circle::new(5.0);
-    println!("\nCircle: {:?}", circle);
-    println!("Area:          {:.2}", circle.area());
-    println!("Circumference: {:.2}", circle.circumference());
+    // ── Another person ────────────────────────────────────────────────────────
+    let raj = Person::new(String::from("Raj"), 16);
+    raj.greet();
+    println!("Is adult: {}", raj.is_adult());
 }
