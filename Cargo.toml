@@ -3,5 +3,9 @@ name = "learning-rust-for-fun"
 version = "0.1.0"
 edition = "2021"
 
+[[bin]]
+name = "q1_ownership"
+path = "practice/q1_ownership.rs"
+
 [dependencies]
 rand = "0.8"
